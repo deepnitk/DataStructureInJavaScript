@@ -27,3 +27,35 @@ function updateScores(team, points, scores) {
 
 // Do not edit the line below.
 exports.tournamentWinner = tournamentWinner;
+
+
+/* Cleaner solution */
+
+function tournamentWinner(competitions, results) {
+  // Write your code here.
+  const leader = {score: -Infinity, name: ''};
+  const scoreBoard = {};
+
+  for(let i = 0; i < competitions.length; i++) {
+    const winnerIdx = results[i] === 0 ? 1 : 0;
+    const winner = competitions[i][winnerIdx];
+
+    if (winner in scoreBoard) {
+      scoreBoard[winner] += 3;
+    } else {
+      scoreBoard[winner] = 3;
+    }
+
+    if( leader.score < scoreBoard[winner]) {
+      leader.name = winner;
+      leader.score = scoreBoard[winner];
+    }
+  }
+  return leader.name;
+  }
+    
+
+
+// Do not edit the line below.
+exports.tournamentWinner = tournamentWinner;
+
