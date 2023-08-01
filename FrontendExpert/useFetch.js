@@ -42,6 +42,8 @@ function useFetch(url) {
 
   //Solution 2: using useReducer instead
 
+  //More about useReducer -> https://react.dev/reference/react/useReducer
+  
   function reducer(state, {type, responseJSON, error}) {
     switch(type) {
       case 'loading':
