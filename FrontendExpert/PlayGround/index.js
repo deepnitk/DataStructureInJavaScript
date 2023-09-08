@@ -255,6 +255,108 @@ Now we formed a closure with close function. Now everytime close function is cal
 
  */
 
+// ----------------------------------------------------------------
+
+/*
+What is closure?
+ans: closure = function + lexical scope/environment
+e.g 1
+
+function outer() {
+    var x = 10;
+
+    function inner() {
+        console.log(x);
+    }
+    var x = 10; this will still form a closure. closure does not depends on any particular order.
+    return inner;
+}
+outer()(); //calling inner function. prints 10;
+
+e.g 2:
+
+function outer() {
+    let x = 10;
+
+    function inner() {
+        console.log(x);
+    }
+    return inner;
+}
+outer()(); //calling inner function. Prints 10
+Here we declared x as let and let is blocked scoped. 
+But it will still form a closure  and it will remember x outside of the scope as well. Hence prints 10;
+
+e.g. 3:
+
+function outer() {
+    var x = 10;
+
+    function inner() {
+        console.log(x);
+    }
+    var x = 100; 
+    return inner;
+}
+outer()();
+
+output:
+100
+explanation:
+var is global scoped and x formed a closure with inner function. and its pointing to ref of x, and it changed to 100 now
+
+e.g. 4:
+
+function outer(y) {
+    let x = 10;
+
+    function inner() {
+        console.log(x, y);
+    }
+    return inner;
+}
+var close = outer("hello world");
+close();
+
+output:
+10 "hello world"
+
+explanations:
+var y is supplied from outside. but its still part of lexical environment of inner and hence forms a closure. henced remembered.
+
+e.g. 5:
+
+function outest() {
+    var z = 100;
+    function outer(y) {
+        let x = 10;
+    
+        function inner() {
+            console.log(x, y, z);
+        }
+        return inner;
+    }
+    return outer;
+}
+outest()("hello world")();
+var close = outest()("hello world");
+close();
+
+output:
+10 "hello world" 100
+
+explanation:
+here we added another nesting of outest function. here "z" will still form closure with inner function because of scope chaining.
+
+e.g. 6:
+
+
+*/
+
+
+
+
+
 
 
 
