@@ -349,9 +349,129 @@ explanation:
 here we added another nesting of outest function. here "z" will still form closure with inner function because of scope chaining.
 
 e.g. 6:
+Global variable with conflicting name
 
+function outest() {
+    var z = 100;
+    function outer(y) {
+        
+        function inner() {
+            console.log(x, y, z);
+        }
+        let x = 10;
+        return inner;
+    }
+    return outer;
+}
+let x = 100;
+outest()("hello world")();
+
+output:
+10 "hello world" 100
+
+explanation:
+here we have 2 declaration a variable x. one at block of outer scope and one at global scope.
+As inner is forming closure with x = 10 and its block scope it will still point to x = 10. 
+But if we remove x = 10 AudioListener, then inner closuere will go and search x till Global scope. that time it will point to x = 100;
+
+----------------------------------------------------------------
+
+Advantages of closures
+1. used in setTimeout.
+2. used in Mudule patterns.
+3. used in function currying
+4. memoize
+5. once
+6. helps in data hiding and encapsulation.
+
+
+1. helps in data hiding and encapsulation.
+// Majopr flaw with below code is anybody can use this counter variable
+var counter = 0;
+
+function incremenetCounter() {
+    counter++;
+}
+
+to solve abpove problem we can use the concept of closure i.e. wrap above code in another function
+
+function counter() {
+    var count = 0;
+
+    function incremenetCounter() {
+        count++;
+    }
+}
+
+console.log(count); // This will not work and give reference error.
+
+function counter() {
+    var count = 0;
+    now if we return this function then this function will make closure with count variable, and we will have access to it.
+    return function incremenetCounter() {
+        count++;
+        console.log(count);
+    }
+}
+
+var counter1 = counter();
+counter1();
+counter1();
+
+here counter will reset and again start from 1.
+var counter2 = counter();
+counter2();
+counter2();
+
+Optimized counter
+function Counter() {
+    var count  = 0;
+    this.incrementCounter = function() {
+        count++;
+        console.log(count);
+    }
+    this.decrementCounter = function() {
+        count--;
+        console.log(count);
+    }
+}
+
+var counter1 = new Counter();
+counter1.incrementCounter();
+counter1.decrementCounter();
+
+----------------------------------------------------------------
+Disadvantages of counter
+1. over consumtion of memory. those closed over variables are not garbage collected.
+2. if not handled properly may lead to memory leaks.
+
+#Garbage Collector
+Frees up unutilized memory.
+JS is a high level langauge and it does its garbage collections of its owm -- by JS engine.
+
+How are closure and garbage collector related?
+function a() {
+    var x = 0;
+    var y = 10;
+    func b forms a closure with var X.
+    return function b() {
+        console.log(x);
+    }
+}
+Ideally, after execution of below line, JS engine should have freed up all the memory. 
+But It doesn't happen because func b formed a closure with var x. and later in the execution, we may need var x again. Hence not garbage collected.
+Though some modern browsers V8 OF Chrome, have smart garbage collection. if this variables are unreachable then they are garbage collected.
+smartly means --> in above example both 'x' and 'y' formed closure, but 'y' is not used hence y can be garbage collected.
+a();
 
 */
+
+
+
+
+
+
+
 
 
 
