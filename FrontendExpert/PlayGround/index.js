@@ -845,7 +845,254 @@ Promise.any() method will accept all the rejected state promises and returns a p
 Promise.race() method will accept all the rejected state promises and without even further checking other rejected state promises after checking 
     the first rejected state promise, it will return an error that contains the data which is passed inside the reject() method of the first rejected state promise.
 
+
+----------------------------------------------------------------
+
+Call, apply and bind function in Javascript.
+
+1. CALL
+
+e.g. 1 using function borowing
+
+let name = {
+    firstName: 'John',
+    lastName: 'Doe',
+    printFullName: function() {
+        console.log(this.firstName + ' ' + this.lastName);
+    }
+}
+
+name.printFullName();
+
+let name2 = {
+    firstName: 'Nunu',
+    lastName: 'Buri',
+}
+
+Function Borrowing
+this will be equals to name2
+name.printFullName.call(name2);
+
+e.g. 2 seperated function
+
+let name = {
+    firstName: 'John',
+    lastName: 'Doe',
+}
+let name2 = {
+    firstName: 'Nunu',
+    lastName: 'Buri',
+}
+
+let printFullName = function() {
+    console.log(this.firstName + ' ' + this.lastName);
+}
+name and name2 will be respective this
+printFullName.call(name);
+printFullName.call(name2);
+
+
+e.g. 3 printFullName with more arguments. First argument will be 'this'
+let name = {
+    firstName: 'John',
+    lastName: 'Doe',
+}
+let name2 = {
+    firstName: 'Nunu',
+    lastName: 'Buri',
+}
+
+let printFullName = function(hometown) {
+    console.log(this.firstName + ' ' + this.lastName + " from " + hometown);
+}
+
+name and name2 will be respective this
+printFullName.call(name, "west Bengal");
+printFullName.call(name2, "Pune");
+
+-----------------------
+2. Apply
+
+Only differnece with call() is the way argument are passed
+
+let name = {
+    firstName: 'John',
+    lastName: 'Doe',
+}
+let name2 = {
+    firstName: 'Nunu',
+    lastName: 'Buri',
+}
+
+let printFullName = function(hometown) {
+    console.log(this.firstName + ' ' + this.lastName + " from " + hometown);
+}
+
+First argument = this. rest of the arguments are to be passed as array
+printFullName.apply(name, ["west Bengal"]);
+printFullName.apply(name2, ["Pune"]);
+
+------------------------------------------
+
+3. Bind 
+Looks exactly like call method. 
+Only differnece is bind returns a function which can be invoked later
+
+let name = {
+    firstName: 'John',
+    lastName: 'Doe',
+}
+let name2 = {
+    firstName: 'Nunu',
+    lastName: 'Buri',
+}
+
+let printFullName = function(hometown) {
+    console.log(this.firstName + ' ' + this.lastName + " from " + hometown);
+}
+
+First argument = this. rest of the arguments are to be passed as we do in call
+const print1 = printFullName.bind(name, "west Bengal");
+print1();
+const print2 = printFullName.bind(name2, "Pune");
+print2();
+
+
+
+------------------------------------------------------------------------------------------------
+
+Polyfill for bind methods
+polyfill = browsers fallback
+
+let name = {
+    firstName: 'John',
+    lastName: 'Doe',
+}
+
+let printFullName = function(hometown, country) {
+    console.log(this.firstName + ' ' + this.lastName + " from " + hometown + ", " + country);
+}
+
+//First argument = this. rest of the arguments are to be passed as array
+const print1 = printFullName.bind(name, "Pune", "India");
+print1();
+
+Function.prototype.myBind = function(...args) {
+    printFullName is 'this' here
+    let obj = this;
+    params = args.slice(1);
+    return function(...args2) {
+        obj.apply(args[0], [...params, ...args2]);
+    }
+
+}
+
+let print2 = printFullName.myBind(name,"India", "west Bengal", );
+print2();
+
+------------------------------------------------------------------------------------------------
+
+Debounce
+
+Search on search bar.
+Suppose I search for schoolBag in amazon.com in this case for autosuggestions amazon should 
+not call API on every keystroke. This can be achieved with Debouncing concept.
+when users takes a pause we should make a API call.
+
+let counter = 0;
+const getData = () => {
+    console.log("API call...", counter++);
+}
+
+const doSomeMagic = (func, delay) => {
+    let timer;
+    return function() {
+        let context = this;
+        let args = arguments;
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            func.apply(context, args);
+        }, delay);
+    }
+}
+
+const debouncedFunction = doSomeMagic(getData, 300);
+
+
+----------------------------------------------------------------
+
+
+Throttling
+
+Throtlling is generally used for performance optimization and rate limiting the 
+function call or function execution.
+
+suppose we have a button and click of that button we will do a API call.
+so a user can click on that button multiple times and API will be called many times.
+so here we should rate limit i.e. user may click ,
+ultiple times but 2nd API will be called after 500ms
+
+const expensive = () => {
+    console.log("Expensive request");
+};
+
+function throttledRequest(func, limit) {
+    let flag = true;
+    let context = this;
+    let args = arguments;
+    return function() {
+        if(flag) {
+            func.apply(context, args);
+            flag = false;
+            setTimeout(() => {
+                flag = true;
+            }, limit);
+        }
+        
+    }
+}
+
+This will make thousands of requests in resize
+window.addEventListener("resize", expensive);
+
+const betterExperience = throttledRequest(expensive, 500);
+
+window.addEventListener("resize", betterExperience);
+
+----------------------------------------------------------------
+
+Debounce vs throtelling
+
+Limiting the rate of requests we use above two.
+
+Case 1: search bar auto suggestions
+    on each "keypress" event API request will be done.
+    we need to limit API calls
+    1. Debounce : only make API call if the difference between two keystrokes > 300ms
+    2. Throttling: only make API call after certain amount of time. After 300 ms.
+In this case Debounce makes more sense
+
+Case 2: addEventListener on resize of window
+    on resize event 1000 of API call will be made
+    1. Debounce : only make API call if the difference between two keystrokes > 300ms
+    2. Throttling: only make API call after certain amount of time. After 300 ms.
+In this case throttle make more sense. resize will keep on happening but we should make API call after 300ms.
+
+Case 3: game were we are clicking a button and API call is happening
+user can click that button 100 times/sec
+    1. Debounce : only make API call if the difference between two clcik event > 500ms
+    2. Throttling: only make API call after certain amount of time. After 500 ms.
+if the gun is machine gun -- throtelling make more sense
+if the gun is pistol --- debouncing make more sense.
+
+
+
 */
+
+
+
+
+
 
 
 
