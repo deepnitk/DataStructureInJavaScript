@@ -528,7 +528,336 @@ const output = users.filter((user) => user.age < 30)
 
 console.log(output);
 
+
+----------------------------------------------------------------
+
+callBack : Callback are super powerful way of handling async operations.
+
+setTimeout(() => {
+console.log("wow!");
+}, 5000)
+
+Problems with callbacks
+1. callBack Hell: One cb inside another callback inside a callback and inside a API and so on. Pyramid of dom
+    1. unmaintainable.
+    2. difficult to debugg
+2. Inversion of control: we lose the control over the callback. We gave the control of a callback function to other API or other function. 
+    so basicallly gave the control of our code to another function.
+
+--------------------------------------------------------------------------
+
+Promises: Are used to handle asynchronous operations.
+
+Life before promises
+
+const cart = ["shoes", "pants", "kurta"];
+
+We have 2 APIs. One for createOrder, it returns a orderId. Second for proceedToPayment with the orderId returned.
+Now both APIs are asynchronous and dependented on each other. i.e. proceedToPayment cant be called when the orderId is not recieved.
+We used to solve that problem by wrapping proceedToPayment in a function and pass it as a cb to createOrder api.
+now its the responsibiklity if the createOrder to call proceedToPayment after the orderId has been received.
+THis will work but we knoe the issue of callbacks.
+createOrder(cart, function (orderId) {
+    proceedToPayment(orderId);
+});
+
+
+Life after Promise
+const cart = ["shoes", "pants", "kurta"];
+
+Promise is nothing but a Object. It has some key value pair. createOrder is a async operation and once it finishes it will return a promise object
+with data field populated. and once we recieve it we can do promise.then and pass our callback function. Now we have the control of calling
+proceedtoPayment method after the promise has been fulfilled.
+const promise =  createOrder(cart);
+
+promise.then(function (orderId) {
+    proceedToPayment(orderId);
+})
+
+Another example of promise
+const URL = 'https://github.com/deepnitk';
+Result will store whatever data is returened. State will be pending, fulfillment, rejection.
+const promise = fetch(URL);
+console.log(promise); // it will show pending and inside its fullfilled state.
+if we want to attach a callback to the promise
+Promise data is immutable
+promise.then((data) => {
+    console.log(data);
+})
+
+
+What is Promise?
+1. A placeholder, which will be filled with data returned from the asynchronous operation.
+2. Container for future value
+3. A Promise is an object representing the eventual completion of the asynchronous operation.
+
+
+Promise chaining example
+
+createOrder(cart)
+    .then(function(orderId){
+        return proceedToPayment(orderId);
+    })
+    .then(function(paymentInfo){
+        return showOrderSummary(paymentInfo)
+    });
+
+
+Create your own Promise
+
+const cart = ["shoes", "pants", "kurta"];
+
+const promise = createOrder(cart);
+
+promise.then(function(orderId) {
+    //this callback will be executed when the promise is resolved.
+    console.log(orderId);
+    // proceedTopayment(orderId);
+})
+.catch(function(err) {
+    //this callback will be executed when the promise is rejected
+    console.log(err.message);
+});
+
+function createOrder(cart) {
+    const pr = new Promise((resolve, reject) => {
+        // Create Order
+        //validate cart
+        if(!validateCart(cart)) {
+            reject(new Error("validation failed"));
+        }
+        const order = "123";
+        resolve(order);
+    });
+    return pr;
+}
+
+function validateCart(cart) {
+    return false;
+}
+
+----------------------------------------------------------------
+
+Promise chaining
+
+const cart = ["shoes", "pants", "kurta"];
+
+createOrder(cart)
+    .then(function (orderId) {
+        console.log(orderId);
+        // we need to always return to the next then chain.
+        return orderId;
+    })
+    .catch(function(err) {
+        //attaching failure callback in case of rejected promise
+        console.log(err.message);
+    })
+    .then(function(orderId){
+        console.log(`Payment for order ${orderId} completed`);
+        return proceedToPayment(orderId);
+    })
+    .then(function(orderId){
+        console.log(`order summary for order ${orderId}`);
+        return showOrderSummary(orderId);
+    })
+    .catch(function(err) {
+        console.log(err.message);
+    })
+    .then(function(orderId){
+        console.log(`wallet status for order ${orderId}`);
+        return updateWalletStatus(orderId);
+    })
+
+function createOrder(cart) {
+    const pr = new Promise((resolve, reject) => {
+        if(!validateCart(cart)) {
+            reject(new Error("validation failed"));
+        }
+        const order = "123";
+        resolve(order);
+    });
+    return pr;
+}
+
+function validateCart(cart) {
+    return true;
+}
+
+function proceedToPayment(orderId) {
+    const pr =  new Promise((resolve, reject) => {
+        if(orderId !== "123") {
+            reject(new Error(`Order ${orderId} already exists`));
+        }
+        resolve(orderId);
+    })
+    return pr;
+}
+
+function showOrderSummary(orderId ) {
+    return new Promise(function(resolve, reject) {
+        resolve(orderId);
+    });
+}
+
+function updateWalletStatus(orderId) {
+    return new Promise(function(resolve, reject) {
+        resolve(orderId);
+    });
+}
+
+----------------------------------------------------------------
+Promise.all
+
+The Promise.all() method is one of the promise concurrency methods. 
+It can be useful for aggregating the results of multiple promises. 
+It is typically used when there are multiple related asynchronous 
+tasks that the overall code relies on to work successfully — all of whom we want to fulfill before the code execution continues.
+
+Promise.all() will reject immediately upon any of the input promises rejecting.
+ In comparison, the promise returned by Promise.allSettled() will wait for all input promises to complete,
+  regardless of whether or not one rejects. Use allSettled() if you need the final result of every promise in the input iterable.
+const promise1 = Promise.resolve(3);
+const promise2 = 42;
+const promise3 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 100, 'foo');
+});
+
+Promise.all([promise1, promise2, promise3]).then((values) => {
+  console.log(values);
+});
+Expected output: Array [3, 42, "foo"]
+
+----------------------------------------------------------------
+
+Promise.allSettled
+
+The Promise.allSettled() static method takes an iterable of promises as input and returns a single Promise.
+ This returned promise fulfills when all of the input's promises settle (including when an empty iterable is passed), 
+ with an array of objects that describe the outcome of each promise.
+
+The Promise.allSettled() method is one of the promise concurrency methods. 
+Promise.allSettled() is typically used when you have multiple asynchronous tasks that are not dependent on one another 
+to complete successfully, or you'd always like to know the result of each promise.
+
+In comparison, the Promise returned by Promise.all() may be more appropriate if the tasks are dependent on each other, 
+or if you'd like to immediately reject upon any of them rejecting.
+ const promise1 = Promise.resolve(3);
+const promise2 = new Promise((resolve, reject) => setTimeout(reject, 100, 'foo'));
+const promises = [promise1, promise2];
+
+Promise.allSettled(promises).then((results) => results.forEach((result) => console.log(result.status)));
+
+Expected output:
+"fulfilled"
+"rejected"
+
+----------------------------------------------------------------
+
+Promise.any
+
+The Promise.any() static method takes an iterable of promises as input and returns a single Promise. 
+This returned promise fulfills when any of the input's promises fulfills, with this first fulfillment value. 
+It rejects when all of the input's promises reject (including when an empty iterable is passed), with an AggregateError containing an array of rejection reasons.
+
+Unlike Promise.all(), which returns an array of fulfillment values, we only get one fulfillment value (assuming at least one promise fulfills). 
+This can be beneficial if we need only one promise to fulfill but we do not care which one does. 
+Note another difference: this method rejects upon receiving an empty iterable, since, truthfully, the iterable contains no items that fulfill. 
+You may compare Promise.any() and Promise.all() with Array.prototype.some() and Array.prototype.every().
+
+const promise1 = Promise.reject(0);
+const promise2 = new Promise((resolve) => setTimeout(resolve, 100, 'quick'));
+const promise3 = new Promise((resolve) => setTimeout(resolve, 500, 'slow'));
+
+const promises = [promise1, promise2, promise3];
+
+Promise.any(promises).then((value) => console.log(value));
+
+Expected output: "quick"
+
+----------------------------------------------------------------
+
+Promise.prototype.finally
+
+The finally() method of Promise instances schedules a function to be called when the promise is settled (either fulfilled or rejected).
+ It immediately returns an equivalent Promise object, allowing you to chain calls to other promise methods.
+
+ function checkMail() {
+  return new Promise((resolve, reject) => {
+    if (Math.random() > 0.5) {
+      resolve('Mail has arrived');
+    } else {
+      reject(new Error('Failed to arrive'));
+    }
+  });
+}
+
+checkMail()
+  .then((mail) => {
+    console.log(mail);
+  })
+  .catch((err) => {
+    console.error(err);
+  })
+  .finally(() => {
+    console.log('Experiment completed');
+  });
+
+output:
+> Error: Failed to arrive
+> "Experiment completed"
+
+
+--------------------------------------------------------
+
+Promise.race
+
+The Promise.race() static method takes an iterable of promises as input and returns a single Promise. 
+This returned promise settles with the eventual state of the first promise that settles.
+
+const promise1 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 50, 'one');
+});
+
+const promise2 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 100, 'two');
+});
+
+Promise.race([promise1, promise2]).then((value) => {
+  console.log(value);
+  Both resolve, but promise2 is faster
+});
+Expected output: "two"
+
+----------------------------------------------------
+
+Differnece between Promise.any ans Promise.race
+
+1. If any of the passed promise (as an input) is in the rejected state:
+
+Promise.any() method will accept that rejected promise and will further check for other passed in promises and if found some resolved promise then it will return its data as an output.
+Promise.race() method will accept that rejected promise and will not further check for other passed in promises and eventually 
+    returns an error message which is passed inside the rejected promise as the data.
+
+2. If all the passed in promises (as in inputs) are in rejected state:
+
+Promise.any() method will accept all the rejected state promises and returns a peculiar (different) error which is known as Aggregated Error  
+    which implies that all the promises which are passed in are actually in the rejected state.
+Promise.race() method will accept all the rejected state promises and without even further checking other rejected state promises after checking 
+    the first rejected state promise, it will return an error that contains the data which is passed inside the reject() method of the first rejected state promise.
+
 */
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
