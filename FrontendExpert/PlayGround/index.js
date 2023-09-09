@@ -464,7 +464,73 @@ Though some modern browsers V8 OF Chrome, have smart garbage collection. if this
 smartly means --> in above example both 'x' and 'y' formed closure, but 'y' is not used hence y can be garbage collected.
 a();
 
+----------------------------------------------------------------
+----------------------------------------------------------------
+
+Map example
+
+const users = [
+    {firstname: 'John', lastname: 'deo', age:42},
+    {firstname: 'Deep', lastname: 'Konar', age:30},
+    {firstname: 'nunu', lastname: 'non', age:26}
+];
+
+list of full names
+
+solution 1 using map
+const output = users.map((x) => x.firstname + ' ' + x.lastname);
+console.log(output);
+
+solution 2 using reduce
+
+const output = users.reduce((acc, user) =>{
+    acc.push(user.firstname + ' ' + user.lastname);
+    return acc;
+},[]);
+
+console.log(output);
+
+reduce example
+
+print age freq array
+{42: 1, 26: 1, 30: 1}
+
+We will use reduce here. Because output is one element not an array.
+const users = [
+    {firstname: 'John', lastname: 'deo', age:42},
+    {firstname: 'Deep', lastname: 'Konar', age:30},
+    {firstname: 'nunu', lastname: 'non', age:26}
+];
+
+const output = users.reduce((acc, user) => {
+    if(acc[user.age]) {
+        acc[user.age] = acc[user.age] + 1;
+    } else {
+        acc[user.age] = 1;
+    }
+    return acc;
+}, {});
+
+console.log(output);
+
+----------------------------------------------------------------
+Print firstname with age < 30
+const users = [
+    {firstname: 'John', lastname: 'deo', age:42},
+    {firstname: 'Deep', lastname: 'Konar', age:30},
+    {firstname: 'nunu', lastname: 'non', age:26}
+];
+
+//Print firstName of all the people whos age < 30
+
+const output = users.filter((user) => user.age < 30)
+                    .map((x) => x.firstname);
+
+console.log(output);
+
 */
+
+
 
 
 
