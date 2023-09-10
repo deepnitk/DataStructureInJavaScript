@@ -1476,8 +1476,25 @@ let output = {
     console.log(localStorage.getItem("name2"));
     localStorage.removeItem("name");
 
-    
+    -----------------------------
+    output question 
+    closure solution
+functions are first class functions
+function sum(a) {
+    return function(b) {
+        if(b) {
+            return sum(a + b);
+        }
+        return a;
+        
+    }
+}
+
+console.log(sum(1)(2)(3)(4)());
+
 */
+
+
 
 
 
