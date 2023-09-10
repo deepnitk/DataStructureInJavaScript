@@ -1492,6 +1492,45 @@ function sum(a) {
 
 console.log(sum(1)(2)(3)(4)());
 
+----------------------------------------------------
+
+CORS, preflight, OPTIONS method
+
+CORS: Cross Origin Resounce Sharing
+
+CORS provides additional http header to tell the browser, whether a specific webapp can share resources among themseleves
+and those webapps are of cross origin.
+
+How CORS works?
+
+we have 2 origins, origin A, origin B
+So, A is requesting something to B,in this case CORS preflight mechanism is follwed.
+CORS preflight: is preflight call(options call) is made before actual API call. Thab B willd decide whether to alloe A or not and sends back a OPTIONS request
+with additional http header. Than actual API call is made.
+
+additional http header: 
+    access-control-alloww-origin: * --> * means any other domain name can access the resource.
+    if access-control-alloww-origin: http://example.com --> in that case only request from http://example.com will be allowed to access the resource.
+
+    other method: access-control-alloww-method.
+
+    Does preflight request is made for all API requests?
+    ans: No. 2 types of request. simple request and preflight request.
+    Some request browser automatically takes simple request and hence no preflight call is made.
+
+------------------------------------------------------------------------------------------------
+
+null vs undefined
+
+Null in JavaScript means an empty value and is also a primitive type in JavaScript. 
+The variable which has been assigned as null contains no value. Undefined, on the other hand, 
+means the variable has been declared, but its value has not been assigned.
+
+
+
+
+
+
 */
 
 
