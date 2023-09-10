@@ -1455,8 +1455,32 @@ let output = {
 
     Local Storage & Session storage
 
+    browser data. Key value pair.
+
+    Session data: as soon as closes window, all data is earsed. data only persisted till window is open
+        unlike cookies session data not send to API calls. large capacity = 5MB, Cookies = 4kb, Session.
+
+    Local storage: same as session storage. doesnt clwar itself. if window is closes, data is persisted.
+        capacity is more than session. more than 5MB.
+
+    ----------------------
+    Same origin policy: orign consit of 3 things 1. protocol 2. host 3. port
+        we are setting data to local stroage, so that data will be stored at http://ratnadek.com
+        so anything on that origin will be accessible.
+
+    --------------------
+
+    code for local storage
+    window.localStorage.setItem("name", "dodo");
+    localStorage.setItem("name2", "nunu");
+    console.log(localStorage.getItem("name2"));
+    localStorage.removeItem("name");
+
     
 */
+
+
+
 
 
 
