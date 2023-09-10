@@ -1341,7 +1341,65 @@ Drawbacks of event delegation
 1. all the events are not bubbled up -- blur, rezize, scroll
 2. stop propagation may defy the purpose.
 
+----------------------------------------------------------------
+
+Prototype and prototypal Inheritance
+
+Prototype:
+whenever u create an object, it attaches an object to ur original object.
+let arr = ["dodo", "nunu", "nunuburi"];
+
+e.g. 1:
+
+let Object = {
+    name: "Object",
+    city: "city",
+    getIntro: function() {
+        console.log(this.name + " from " + this.city);
+    }
+}
+
+arr.__proto__ == Array.prototype;
+arr.__proto__.__proto__ == Object.prototype;
+arr.__proto__.__proto__.__proto__ == null;
+
+function.__proto__ == Function.prototype;
+function.__proto__.__proto__ == Object.prototype;
+function.__proto__.__proto__.__proto__ == null;
+
+
+e.g. 2:
+let arr = ["dodo", "nunu", "nunuburi"];
+
+let object = {
+    name: "Dodo",
+    city: "Pune",
+    getIntro: function() {
+        console.log(this.name + " from " + this.city);
+    }
+}
+
+let object2 = {
+    name: "Nunu",
+}
+
+never do this
+we can access the properties of the object inside object2
+object2.__proto__ = object;
+object.getIntro();
+object2.getIntro(); // now this = Object2
+
+------------------------------------------------------------------------------
+
+
+Thinking Recursively
+
+
+
 */
+
+
+
 
 
 
