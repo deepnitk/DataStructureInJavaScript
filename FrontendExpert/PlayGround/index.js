@@ -1163,9 +1163,149 @@ Case 3. defer
 
     defer maintains the order of execution of scripts. mostly wise to use the defer.
 
+-----------------------------------------------------------------------------------------------------
+
+Event Bubbling and capturing
+
+These are two ways of DOM propagation. suppose we have nested elements in html.
+Suppose there is a parent div, and inside it a child div. if any evebt occures on child than it will be progated to parent.
+
+Bubbling: in case of bubbling, first child's onclick will be called --> parent's onclick --> grandchild's onclick.
+Capturing/Trickling: if u like child. first grandchild's onclick will be called --> parent's onclick --> child's onclick. i.e. opposite of bubbling.
+    If you click grandchild --> only grandchild's onclick is called --> cant go further done.
+    trickkle done from top to item clicked.
+
+Here 1st argument is event name, 2nd is cb function to be called and 3rd is boolean
+value useCapture to tell whether to use bubbling or capture. TRUE = capturing , FALSE/default = bubbling.
+
+
+e.g. 1
+
+document.getElementById("grandparent")
+.addEventListener("click", () => {
+    console.log("Grandparent clicked");
+}, true);
+
+document.getElementById("parent")
+.addEventListener("click", () => {
+    console.log("Parent clicked");
+}, true);
+
+document.getElementById("child")
+.addEventListener("click", () => {
+    console.log("Child clicked");
+}, true);
+
+
+Output:
+Grandparent clicked
+Parent clicked
+Child clicked
+
+
+e.g. 2
+
+document.getElementById("grandparent")
+.addEventListener("click", () => {
+    console.log("Grandparent clicked");
+}, true); //capturing
+
+document.getElementById("parent")
+.addEventListener("click", () => {
+    console.log("Parent clicked");
+}, false); //bubbling
+
+document.getElementById("child")
+.addEventListener("click", () => {
+    console.log("Child clicked");
+}, true); //capturing
+
+Output:
+Grandparent clicked
+Child clicked
+Parent clicked
+
+e.g. 3
+
+document.getElementById("grandparent")
+.addEventListener("click", () => {
+    console.log("Grandparent clicked");
+}, true); //capturing
+
+document.getElementById("parent")
+.addEventListener("click", () => {
+    console.log("Parent clicked");
+}, false); //bubbling
+
+document.getElementById("child")
+.addEventListener("click", () => {
+    console.log("Child clicked");
+}, false); //bubbling
+
+Output: click on child. First capturing cycle and then bubbling cycle
+
+Grandparent clicked
+Child clicked
+Parent clicked
+
+e.g. 4: Stop propagation in case of bubbling
+
+document.getElementById("grandparent")
+.addEventListener("click", () => {
+    console.log("Grandparent clicked");
+}, false); //bubbling
+
+document.getElementById("parent")
+.addEventListener("click", (e) => {
+    console.log("Parent clicked");
+    e.stopPropagation();
+}, false); //bubbling
+
+document.getElementById("child")
+.addEventListener("click", (e) => {
+    console.log("Child clicked");
+    we are stoping the bubbling or propagation here
+    e.stopPropagation();
+}, false); //bubbling
+
+Output: click on child. First capturing cycle and then bubbling cycle
+Child clicked
+
+
+e.g. 5: stop propagation in case of capturing cycle
+
+document.getElementById("grandparent")
+.addEventListener("click", () => {
+    console.log("Grandparent clicked");
+}, true); //capturing
+
+document.getElementById("parent")
+.addEventListener("click", (e) => {
+    e.stopPropagation();
+    console.log("Parent clicked");
+}, true); //capturing
+
+document.getElementById("child")
+.addEventListener("click", (e) => {
+    console.log("Child clicked");
+    we are stoping the bubbling or propagation here
+    e.stopPropagation();
+}, true); //capturing
+
+Output: click on child. First capturing cycle and then bubbling cycle
+Grandparent clicked
+Parent clicked
+
+
+----------------------------------------------------------------------
+
+Event delegation
 
 
 */
+
+
+
 
 
 
