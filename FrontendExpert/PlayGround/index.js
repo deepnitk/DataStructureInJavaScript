@@ -1085,9 +1085,86 @@ user can click that button 100 times/sec
 if the gun is machine gun -- throtelling make more sense
 if the gun is pistol --- debouncing make more sense.
 
+----------------------------------------------------------------
+
+Currying
+
+Currying in JavaScript transforms a function with multiple arguments into a 
+nested series of functions, each taking a single argument. 
+Currying helps you avoid passing the same variable multiple times, and it helps you create a higher order function.
+
+Two ways of currying
+1. Bind method
+
+let multiply = function(x, y) {
+    console.log(x*y);
+}
+
+bind will create a copy/instance of multiply with a new 'this' context
+here 2 will be assigned to x
+let multiplyByTwo = multiply.bind(this, 2);
+and y will be assigned to 3
+multiplyByTwo(3);
+
+let multiplyByThree = multiply.bind(this, 3);
+multiplyByThree(3);
+
+
+2. Function closure
+
+let multiply = function(x) {
+    when a new function is returned, after returing also the function remberes the
+    value of x. i.e. inner function forms a closure with outer fucntion lexical environment
+    return function(y) {
+        console.log(x * y);
+    }
+}
+
+let multiplyByTwo = multiply(2);
+multiplyByTwo(3);
+
+let multiplyByThree = multiply(3);
+multiplyByThree(3);
+
+----------------------------------------------------------------------------------
+
+Async vs defer attributes in javascript
+
+async and defer are boolean attributes which are used along with script tags to 
+load the external scripts efficiently into our web page.
+
+3 cases we need to understand
+
+1. normal
+2. async
+3. defer
+
+when we load our webpage, 2 major things happen in our browser
+1. HTML parsing
+2. loading of scripts
+    1. fetching the script from n/w
+    2. executing the script line by line.
+
+Case 1. Normal
+    In this case the browser will read the html file line by line. Once it encounters 
+    the script, it pause the parsing and fetches the script and executes the script and after that resume html paesing.
+    JS is blocking the rendering of the HTML.
+    Stops Html parsing --> scripts fetched --> scripts executed --> html parsing resumes
+Case 2. Async
+    In this case the browser will read html line  by line. Once it encounters the script,
+    html parsing goes on and the script fetching is done asynchronously.
+    Html parsing + scripts are fetched --> Html parsing stops --> execute fetched scripts --> resume html parsing
+Case 3. defer
+    In this case the browser will read html line  by line. Once it encounters the script,
+    html parsing goes on and the script fetching is done asynchronously. scripts are executed once html parsin g is done.
+    Html parsing + scripts are fetched --> Html parsing continues --> html parsing completes --> execute fetched scripts
+
+
 
 
 */
+
+
 
 
 
