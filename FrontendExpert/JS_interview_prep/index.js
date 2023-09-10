@@ -1394,9 +1394,71 @@ object2.getIntro(); // now this = Object2
 
 Thinking Recursively
 
+Question: below is ur input
+let user = {
+    name: "Dodo",
+    address: {
+        personal: {
+            city: "Pune",
+            area: "Hadapsar"
+        },
+        office : {
+            city: "Pune",
+            area: {
+                landmark: "Magarpatta",
+            }
+        }
+    }
+}
 
+and oputput will be something like below
 
+let output = {
+    user_name : "Dodo",
+    user_address_personal_city : "Pune",
+    user_address_personal_city_area : "Hadapsar",
+    user_address_office_city : "Pune",
+    user_address_office_area_landmark : "Magarpatta",
+};
+
+    Solution:
+
+    let user = {
+        name: "Dodo",
+        address: {
+            personal: {
+                city: "Pune",
+                area: "Hadapsar"
+            },
+            office : {
+                city: "Pune",
+                area: {
+                    landmark: "Magarpatta",
+                }
+            }
+        }
+    }
+    function magicFunction(user, parent, finalObject) {
+        for(let [key, value] of Object.entries(user)) {
+            if( typeof value !== 'object' && typeof value !== null) {
+                finalObject[parent + "_" + key] = value;
+            } else {
+                magicFunction(value, parent + "_" + key, finalObject);
+            }
+        }
+    }
+    let finalObject = {}
+    magicFunction(user, "user", finalObject);
+    console.log(finalObject);
+
+    --------------------------------------------------------------------------
+
+    Local Storage & Session storage
+
+    
 */
+
+
 
 
 
