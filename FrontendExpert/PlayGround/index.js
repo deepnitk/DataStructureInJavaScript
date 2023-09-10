@@ -1301,8 +1301,49 @@ Parent clicked
 
 Event delegation
 
+suppose we have a e-commerce site. and we have categoried as laptops, camera, shoes
+when we click on one of them, it take us to a page where we clicked.
+
+we will attach each event listner to the categories and onclick of that cb will be called.
+By this way our webpage will have lot of event handlers hanging around and lead to performance issue.
+
+Solutiion:
+Instead of individually attaching single event handlers on each category,
+ we can attach event handlers on parent of categories. 
+so once I click on a category, it will bubble up the categories and trigger the cb attached to it.
+
+e.g. 1 with categories, we click on one li tag and event gets delkegated to its parent.
+
+document.getElementById("category").addEventListener("click", (e) => {
+    console.log(e.target);
+    if(e.target.tagName == 'LI') {
+        window.location.href = "/" + e.target.id;
+    }
+    
+})
+
+e.g. 2 we want the name typed to be in uppercase always
+document.getElementById("form").addEventListener("keyup", (e) => {
+    console.log(e.target);
+    if(e.target.dataset.uppercase !== undefined) {
+        e.target.value = e.target.value.toUpperCase();
+    }
+});
+
+
+Benfits of event delegation
+1. memory optimization: only single event handler needed now.
+2. writing less code to attach event to parent
+3. DOM manipulation -- new child added, doesnt change anything beacuse they will bubble up of its own.
+
+
+Drawbacks of event delegation
+1. all the events are not bubbled up -- blur, rezize, scroll
+2. stop propagation may defy the purpose.
 
 */
+
+
 
 
 
