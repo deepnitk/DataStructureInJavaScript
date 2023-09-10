@@ -1154,11 +1154,14 @@ Case 2. Async
     In this case the browser will read html line  by line. Once it encounters the script,
     html parsing goes on and the script fetching is done asynchronously.
     Html parsing + scripts are fetched --> Html parsing stops --> execute fetched scripts --> resume html parsing
+    DISADVANTAGE: async attributes does not gurantee the order of execution of scripts.
+    UC: analytics script which are moduler, here we can use the async.
 Case 3. defer
     In this case the browser will read html line  by line. Once it encounters the script,
     html parsing goes on and the script fetching is done asynchronously. scripts are executed once html parsin g is done.
     Html parsing + scripts are fetched --> Html parsing continues --> html parsing completes --> execute fetched scripts
 
+    defer maintains the order of execution of scripts. mostly wise to use the defer.
 
 
 
