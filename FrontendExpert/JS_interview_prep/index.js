@@ -1535,12 +1535,8 @@ The variable which has been assigned as null contains no value. Undefined, on th
 means the variable has been declared, but its value has not been assigned.
 
 
-
-
-
-
+-----------------------------------------------------------------------------------------
 */
-
 
 
 
