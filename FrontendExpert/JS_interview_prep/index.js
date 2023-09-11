@@ -40,7 +40,7 @@
      function a() {
         b();
         function b() {
-            console.log(x);
+            console.log(x); //1
         }
     }
     var x = 1;
@@ -53,7 +53,7 @@
 /*
     Let and const Hosisting environment
     console.log(a); //ref error. cannot access before initialization
-    console.log(b);
+    console.log(b); //undefined error
     let a = 1;
     var b = 100;
 */
@@ -107,14 +107,15 @@
         function a() {
             var x = 1;
             function b() {
-                console.log(x);
-                console.log(y);
+                console.log(x); // 100
+                console.log(y); //1000
             }
             x = 100;
             return b;
         }
+        return a;
     }
-    var res = b();
+    var res = c()();
     res();
 
     ------------------------------------------------
@@ -137,6 +138,7 @@
 // --------------------------------------------------
 /*
     Callback function
+
     setTimeout(() => {
         console.log("setTimeout");
     }, 5000);
@@ -160,6 +162,7 @@
 
 /*
 Closure interview question
+
 1. 
 function x() {
     var  i = 1;
@@ -378,7 +381,7 @@ But if we remove x = 10 AudioListener, then inner closuere will go and search x 
 
 Advantages of closures
 1. used in setTimeout.
-2. used in Mudule patterns.
+2. used in Module patterns.
 3. used in function currying
 4. memoize
 5. once
@@ -386,7 +389,8 @@ Advantages of closures
 
 
 1. helps in data hiding and encapsulation.
-// Majopr flaw with below code is anybody can use this counter variable
+
+Major flaw with below code is anybody can use this counter variable
 var counter = 0;
 
 function incremenetCounter() {
@@ -424,6 +428,7 @@ counter2();
 counter2();
 
 Optimized counter
+
 function Counter() {
     var count  = 0;
     this.incrementCounter = function() {
@@ -621,8 +626,8 @@ promise.then(function(orderId) {
 
 function createOrder(cart) {
     const pr = new Promise((resolve, reject) => {
-        // Create Order
-        //validate cart
+        Create Order
+        validate cart
         if(!validateCart(cart)) {
             reject(new Error("validation failed"));
         }
@@ -1094,6 +1099,7 @@ nested series of functions, each taking a single argument.
 Currying helps you avoid passing the same variable multiple times, and it helps you create a higher order function.
 
 Two ways of currying
+
 1. Bind method
 
 let multiply = function(x, y) {
@@ -1107,7 +1113,7 @@ and y will be assigned to 3
 multiplyByTwo(3);
 
 let multiplyByThree = multiply.bind(this, 3);
-multiplyByThree(3);
+multiplyByThree(3); 
 
 
 2. Function closure
@@ -1120,7 +1126,7 @@ let multiply = function(x) {
     }
 }
 
-let multiplyByTwo = multiply(2);
+let multiplyByTwo = multiply(2); or multiply(2)(3)
 multiplyByTwo(3);
 
 let multiplyByThree = multiply(3);
@@ -1369,6 +1375,7 @@ function.__proto__.__proto__.__proto__ == null;
 
 
 e.g. 2:
+
 let arr = ["dodo", "nunu", "nunuburi"];
 
 let object = {
@@ -1478,17 +1485,18 @@ let output = {
 
     -----------------------------
     output question 
+
     closure solution
-functions are first class functions
-function sum(a) {
-    return function(b) {
-        if(b) {
-            return sum(a + b);
+    functions are first class functions
+    function sum(a) {
+        return function(b) {
+            if(b) {
+                return sum(a + b);
+            }
+            return a;
+            
         }
-        return a;
-        
     }
-}
 
 console.log(sum(1)(2)(3)(4)());
 
@@ -1532,13 +1540,6 @@ means the variable has been declared, but its value has not been assigned.
 
 
 */
-
-
-
-
-
-
-
 
 
 
