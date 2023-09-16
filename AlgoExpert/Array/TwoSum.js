@@ -22,24 +22,22 @@ function twoNumberSum(array, targetSum){
 */
 
 function twoNumberSum(array, targetSum){
-    const nums = {};
-    for(const num of array) {
-        const potentialMatch = targetSum - num;
-        if(potentialMatch in nums) {
-            return [potentialMatch, num];
-        } else {
-            nums[num] = true;
+    let map = new Map();
+    for(let i = 0; i < nums.length; i++) {
+        let potentialMatch = target - nums[i];
+        if ( map.has(potentialMatch) ) {
+            return [map.get(potentialMatch), i];
         }
+        map.set(nums[i], i);
     }
-    
-    return [];
+    return []
 }
 
 /*
     Solution 3 -- Sorting .
     TC:O(N) SC:O(1)
 */
-
+// This solution will not help with we need to return the index.
 function twoNumberSum(array, targetSum){
     array.sort((a, b) => a - b);
     let left = 0;
