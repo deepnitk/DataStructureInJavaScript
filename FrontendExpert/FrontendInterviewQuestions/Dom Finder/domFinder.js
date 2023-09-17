@@ -8,7 +8,7 @@
 const getPathFromChildToParent = (parent, child) => {
     let currentNode = child;
     const pathArray = [];
-    while(currentNode === parent) {
+    while(currentNode !== parent) {
         const parentElement = currentNode.parentElement;
         const childrensArray = Array.from(parentElement.children);
         pathArray.push(childrensArray.indexOf(currentNode));
