@@ -6,7 +6,7 @@ const memoize = (fn) => {
     const cache = {};
     return (...args) => {
         // store the args in the cache in a string format, because we dont know if
-        // args is a string or number por objects.
+        // args is a string or number or objects.
         const argsToString = JSON.stringify(args);
         if(argsToString in cache) {
             console.log(`fetching from cache for args ${argsToString}`)

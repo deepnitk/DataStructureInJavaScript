@@ -7,10 +7,11 @@
  * 
  * we need o create a polyfill of .map() function
  */
-Array.prototype.myMap = function(callbackFunc) {
-    const output = []; 
-    for (let i = 0; i < this.length; i++) {
-        output[i] = callbackFunc(this[i]);
+
+Array.prototype.myMap = function(cb) {
+    const output = [];
+    for(let i = 0; i < this.length; i++) {
+        output[i] = cb(this[i]);
     }
     return output;
 }

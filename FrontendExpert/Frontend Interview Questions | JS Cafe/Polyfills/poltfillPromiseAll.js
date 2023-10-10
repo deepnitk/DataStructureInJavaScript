@@ -12,30 +12,32 @@ const dummyAPI = (time) => {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             resolve(time);
-        }, time)
+        }, time);
+
     })
-};
+}
 
 const tasksArray = [dummyAPI(1000), dummyAPI(3000), dummyAPI(5000)];
 
-const promisePollyfill = (tasksArray) => {
+const promisePollyfill = ((tasksArray) => {
     return new Promise((resolve, reject) => {
         const output = [];
-        tasksArray.forEach((promsie, task) => {
-            promsie.then((data) => {
+        tasksArray.forEach((promise, index) => {
+            promise.then((data) => {
                 output[index] = data;
                 if (index === tasksArray.length - 1) {
                     resolve(output);
                 }
-            }).catch((err) => {
-                reject(err);
+            }).catch((error) => {
+                reject(error);
             })
-        })
-    })
-}
+        });
+    });
+
+})
 
 promisePollyfill(tasksArray).then((data) => {
     console.log(`output: ${data}`);
 }).catch((err) => {
     console.log(`err: ${err}`);
-});
+})
